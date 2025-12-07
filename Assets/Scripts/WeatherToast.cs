@@ -5,51 +5,49 @@ using UnityEngine.InputSystem;
 
 public class WeatherToast : MonoBehaviour
 {
-    public LocationProvider location;   // assign in Inspector
+    [SerializeField] private InputActionAsset inputActions;
+    [SerializeField] private LocationProvider location;
 
+    private InputAction tapAction;
+    private Camera cam;
     private bool _locationReady = false;
-    Camera cam;
 
     private async void Start()
     {
         cam = Camera.main;
+
         while (!location.IsReady)
             await Task.Delay(100);
 
         _locationReady = true;
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        if (Mouse.current.leftButton.wasPressedThisFrame || Touchscreen.current?.primaryTouch.press.wasPressedThisFrame == true)
-        {
-            HandleTap();
-        }
+        var map = inputActions.FindActionMap("Gameplay", true);
+        tapAction = map.FindAction("Tap", true);
+
+        map.Enable();
+        tapAction.performed += OnTap;
     }
-    private Vector2 GetPointerPosition()
-    {
 
-        if (Touchscreen.current != null && Touchscreen.current.press.isPressed)
-        {
-            return Touchscreen.current.position.ReadValue();
-        }
-        else if (Mouse.current != null && Mouse.current.leftButton.isPressed)
-        {
-            return Mouse.current.position.ReadValue();
-        }
-        return Vector2.zero; // fallback
+    private void OnDisable()
+    {
+        if (tapAction != null)
+            tapAction.performed -= OnTap;
     }
-    void HandleTap()
+
+    private void OnTap(InputAction.CallbackContext ctx)
     {
-        Vector2 pos = GetPointerPosition();
+        Vector2 screenPos = GetPointerPosition();
 
-        Ray ray = cam.ScreenPointToRay(pos);
+        Ray ray = cam.ScreenPointToRay(screenPos);
 
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        if (Physics.Raycast(ray, out var hit))
         {
             if (hit.transform == transform)
             {
-                Debug.Log("working");
+                Debug.Log("Cube tapped!");
 
                 if (!_locationReady)
                 {
@@ -64,4 +62,16 @@ public class WeatherToast : MonoBehaviour
             }
         }
     }
+
+    private Vector2 GetPointerPosition()
+    {
+        if (Touchscreen.current != null)
+            return Touchscreen.current.primaryTouch.position.ReadValue();
+
+        if (Mouse.current != null)
+            return Mouse.current.position.ReadValue();
+
+        return Vector2.zero;
+    }
+
 }

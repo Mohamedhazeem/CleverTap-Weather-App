@@ -347,13 +347,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 410087039}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.6830127, y: -0.18301266, z: 0.18301266, w: 0.6830127}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: -30, z: 0}
 --- !u!114 &410087042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -874,6 +874,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a083e43fbab0b34498b1bd34d4cc2ead, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeatherToast
+  inputActions: {fileID: -944628639613478452, guid: 39a4a04812ccbec43a274b1eebebcc5b, type: 3}
   location: {fileID: 2023915786}
 --- !u!114 &2023915786
 MonoBehaviour:
