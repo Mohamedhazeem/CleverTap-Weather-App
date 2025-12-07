@@ -22,11 +22,12 @@ public class WeatherToast : MonoBehaviour
 
     private bool locationReady;
 
-    private async void Awake()
+    private void Awake()
     {
         location = new CleverTapLocationService(locationProvider);
         weather = new CleverTapWeatherService();
         toast = new CleverTapToastService();
+
     }
 
     private async void Start()
@@ -37,6 +38,7 @@ public class WeatherToast : MonoBehaviour
             await Task.Delay(100);
 
         locationReady = true;
+        weather.Initialize();
     }
 
     private void OnEnable()
