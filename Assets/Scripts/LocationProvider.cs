@@ -3,9 +3,11 @@ using System.Collections;
 
 public class LocationProvider : MonoBehaviour
 {
+
     public float Latitude { get; private set; }
     public float Longitude { get; private set; }
     public bool IsReady { get; private set; }
+    private static WaitForSeconds _waitForSeconds = new(1);
 
     private IEnumerator Start()
     {
@@ -20,7 +22,7 @@ public class LocationProvider : MonoBehaviour
         int maxWait = 10;
         while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
         {
-            yield return new WaitForSeconds(1);
+            yield return _waitForSeconds;
             maxWait--;
         }
 

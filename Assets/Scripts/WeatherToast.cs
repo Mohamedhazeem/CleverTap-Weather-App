@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using CleverTap.WeatherSDK.WeatherAPI;
 using UnityEngine;
 
@@ -9,9 +10,8 @@ public class WeatherToast : MonoBehaviour
 
     private async void Start()
     {
-        // Wait for GPS to be ready
         while (!location.IsReady)
-            await System.Threading.Tasks.Task.Delay(100);
+            await Task.Delay(100);
 
         _locationReady = true;
     }
@@ -21,12 +21,12 @@ public class WeatherToast : MonoBehaviour
         if (!_locationReady)
         {
             Debug.Log("Location not ready yet!");
+            WeatherManager.Instance.ShowMessageToast("Location Not Enabled.");
             return;
         }
 
         float lat = location.Latitude;
         float lon = location.Longitude;
-        // Show toast using SDK
         await WeatherManager.Instance.ShowCurrentTemperatureToast(lat, lon);
     }
 }

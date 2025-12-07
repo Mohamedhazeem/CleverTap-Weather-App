@@ -762,6 +762,7 @@ GameObject:
   - component: {fileID: 2023915782}
   - component: {fileID: 2023915781}
   - component: {fileID: 2023915785}
+  - component: {fileID: 2023915786}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -873,7 +874,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a083e43fbab0b34498b1bd34d4cc2ead, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeatherToast
-  location: {fileID: 0}
+  location: {fileID: 2023915786}
+--- !u!114 &2023915786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2023915780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f124aa3ad2dac6343b65cfb4a92a86b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocationProvider
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
