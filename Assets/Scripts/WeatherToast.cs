@@ -1,18 +1,33 @@
 using System.Threading.Tasks;
-using CleverTap.WeatherSDK.WeatherAPI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class WeatherToast : MonoBehaviour
 {
+    [Header("Input")]
     [SerializeField] private InputActionAsset inputActions;
-    [SerializeField] private LocationProvider location;
-    private float toastCooldown = 1.2f;
-    private float lastToastTime = 0f;
+
+    [Header("SDK Providers")]
+    [SerializeField] private LocationProvider locationProvider;
 
     private InputAction tapAction;
     private Camera cam;
-    private bool _locationReady = false;
+
+    private float toastCooldown = 1.2f;
+    private float lastToastTime;
+
+    private ILocationService location;
+    private IWeatherService weather;
+    private IToastService toast;
+
+    private bool locationReady;
+
+    private async void Awake()
+    {
+        location = new CleverTapLocationService(locationProvider);
+        weather = new CleverTapWeatherService();
+        toast = new CleverTapToastService();
+    }
 
     private async void Start()
     {
@@ -21,7 +36,7 @@ public class WeatherToast : MonoBehaviour
         while (!location.IsReady)
             await Task.Delay(100);
 
-        _locationReady = true;
+        locationReady = true;
     }
 
     private void OnEnable()
@@ -42,31 +57,37 @@ public class WeatherToast : MonoBehaviour
     private void OnTap(InputAction.CallbackContext ctx)
     {
         if (Time.time - lastToastTime < toastCooldown)
-            return; // prevent spam
+            return;
 
         lastToastTime = Time.time;
-        Vector2 screenPos = GetPointerPosition();
 
+        if (!IsTappedObjectThis())
+            return;
+
+        HandleWeatherTap();
+    }
+
+    private void HandleWeatherTap()
+    {
+        if (!locationReady)
+        {
+            toast.ShowMessage("Location Not Enabled.");
+            return;
+        }
+
+        weather.ShowCurrentTemperature(location.Latitude, location.Longitude);
+    }
+
+    private bool IsTappedObjectThis()
+    {
+        Vector2 screenPos = GetPointerPosition();
         Ray ray = cam.ScreenPointToRay(screenPos);
 
         if (Physics.Raycast(ray, out var hit))
         {
-            if (hit.transform == transform)
-            {
-                Debug.Log("Cube tapped!");
-
-                if (!_locationReady)
-                {
-                    WeatherManager.Instance.ShowMessageToast("Location Not Enabled.");
-                    return;
-                }
-
-                float lat = location.Latitude;
-                float lon = location.Longitude;
-
-                WeatherManager.Instance.ShowCurrentTemperatureToast(lat, lon);
-            }
+            return hit.transform == transform;
         }
+        return false;
     }
 
     private Vector2 GetPointerPosition()
@@ -79,5 +100,4 @@ public class WeatherToast : MonoBehaviour
 
         return Vector2.zero;
     }
-
 }
