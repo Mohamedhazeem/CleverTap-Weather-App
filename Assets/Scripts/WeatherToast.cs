@@ -7,6 +7,8 @@ public class WeatherToast : MonoBehaviour
 {
     [SerializeField] private InputActionAsset inputActions;
     [SerializeField] private LocationProvider location;
+    private float toastCooldown = 1.2f;
+    private float lastToastTime = 0f;
 
     private InputAction tapAction;
     private Camera cam;
@@ -39,6 +41,10 @@ public class WeatherToast : MonoBehaviour
 
     private void OnTap(InputAction.CallbackContext ctx)
     {
+        if (Time.time - lastToastTime < toastCooldown)
+            return; // prevent spam
+
+        lastToastTime = Time.time;
         Vector2 screenPos = GetPointerPosition();
 
         Ray ray = cam.ScreenPointToRay(screenPos);
