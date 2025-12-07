@@ -35,7 +35,6 @@ public class LocationProvider : MonoBehaviour
         {
             Permission.RequestUserPermission(Permission.FineLocation);
 
-            // Wait until user responds
             while (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
                 yield return null;
         }
@@ -68,7 +67,6 @@ public class LocationProvider : MonoBehaviour
             yield break;
         }
 
-        // SUCCESS
         Latitude = Input.location.lastData.latitude;
         Longitude = Input.location.lastData.longitude;
         IsReady = true;

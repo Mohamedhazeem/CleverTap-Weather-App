@@ -13,8 +13,8 @@ public class WeatherToast : MonoBehaviour
     private InputAction tapAction;
     private Camera cam;
 
-    private float toastCooldown = 1.2f;
-    private float lastToastTime;
+    private readonly float _toastCooldown = 1.2f;
+    private float _lastToastTime;
 
     private ILocationService location;
     private IWeatherService weather;
@@ -56,10 +56,10 @@ public class WeatherToast : MonoBehaviour
 
     private void OnTap(InputAction.CallbackContext ctx)
     {
-        if (Time.time - lastToastTime < toastCooldown)
+        if (Time.time - _lastToastTime < _toastCooldown)
             return;
 
-        lastToastTime = Time.time;
+        _lastToastTime = Time.time;
 
         if (!IsTappedObjectThis())
             return;
