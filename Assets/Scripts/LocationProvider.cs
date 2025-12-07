@@ -1,5 +1,8 @@
 using UnityEngine;
 using System.Collections;
+#if UNITY_ANDROID
+using UnityEngine.Android;
+#endif
 
 public class LocationProvider : MonoBehaviour
 {
@@ -11,11 +14,17 @@ public class LocationProvider : MonoBehaviour
 
     private IEnumerator Start()
     {
-        if (!Input.location.isEnabledByUser)
+#if UNITY_ANDROID
+        if (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
         {
-            Debug.Log("Location services disabled.");
-            yield break;
+            Permission.RequestUserPermission(Permission.FineLocation);
+
+            // Wait for user to respond
+            while (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
+                yield return null;
         }
+
+#endif
 
         Input.location.Start();
 
