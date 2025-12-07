@@ -875,7 +875,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeatherToast
   inputActions: {fileID: -944628639613478452, guid: 39a4a04812ccbec43a274b1eebebcc5b, type: 3}
-  location: {fileID: 2023915786}
+  locationProvider: {fileID: 2023915786}
 --- !u!114 &2023915786
 MonoBehaviour:
   m_ObjectHideFlags: 0
